@@ -182,37 +182,64 @@ def buildHull( points ):
     # from interior points disappear after you do this.
     #
     # [YOUR CODE HERE]
+
+    #clockwise 
     pointsLen = len(points)
     hull = []
     p = 0
     q = 0
-    
-    while True:
+    run = 1
+    while run == 1:
         hull.append(p)
 
-        q = (p + 1) % pointsLen
-
+        q = (p + 1) % pointsLen #ensuring that the value is less than 66
 
         for iter in range(pointsLen):
-            if(turn(points[p], points[iter], points[q]) == 2):
+            if(turn(points[p], points[iter], points[q]) == 2): #if the turn of the 3 points is a right turn or "counter clockwise", that point is the first point that will be hit 
+                q = iter                                       # when you go in the clockwise direction. Imagine an infinetly long line from the point you are at starting from the leftmost point.
+        p = q                                                  #The line will start from the left side or 0 degrees and move to the right until it hits a point. That point will be on the convex hull
+        if p == 0:                                             # and is considered the next point. Then the same thing will happen from the next point all the way to the last point.
+            run = 0                                            # This returns the indexes of points and stores the indexes in the list named hull.
+
+    print(hull)
+
+    hullLength = len(hull)
+    print(hullLength)
+    for i in range(hullLength):                                #Using the indexes found in the code above, set the cw or ccw point respectively.
+        if i == 11:
+            points[hull[i]].cwPoint = points[0]
+            
+        else:
+            points[hull[i]].cwPoint = points[hull[i+1]]
+
+    #counter clock wise
+    pointsLen = len(points)
+    hull = []
+    p = 0
+    q = 0
+    run = 1
+    while run == 1:
+        hull.append(p)
+        
+        q = (p + 1) % pointsLen
+
+        for iter in range(pointsLen):
+            if(turn(points[p], points[iter], points[q]) == 1):
                 q = iter
         p = q
-
         if p == 0:
-            break
+            run = 0
 
     print(hull)
 
     hullLength = len(hull)
     print(hullLength)
     for i in range(hullLength):
-        print(points[hull[i]])
         if i == 11:
-            points[hull[i]].cwPoint = points[0]
-            print(points[hull[i]].cwPoint)
+            points[hull[i]].ccwPoint = points[0]
+            
         else:
-            points[hull[i]].cwPoint = points[hull[i+1]]
-            print(points[hull[i]].cwPoint)
+            points[hull[i]].ccwPoint = points[hull[i+1]]
     
     
 
