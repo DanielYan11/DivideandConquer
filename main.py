@@ -152,25 +152,28 @@ def turn( a, b, c ):
 
     det = (a.x-c.x) * (b.y-c.y) - (b.x-c.x) * (a.y-c.y)
 
-    if det > 0:
+    if det > 0: #clockwise == 1
         return LEFT_TURN
-    elif det < 0:
+    elif det < 0: #counter clockwise == 2
         return RIGHT_TURN
     else:
-        return COLLINEAR
+        return COLLINEAR # == 3
 
 
 # Build a convex hull from a set of point
 #
 # Use the method described in class
 
+        
 
 def buildHull( points ):
 
     # Handle base cases of two or three points
     #
     # [YOUR CODE HERE]
-
+    if len(points) < 3:
+        print('Not enough points')
+        return
     # Handle recursive case.
     #
     # After you get the hull-merge working, do the following: For each
@@ -179,7 +182,46 @@ def buildHull( points ):
     # from interior points disappear after you do this.
     #
     # [YOUR CODE HERE]
+    pointsLen = len(points)
+    hull = []
+    p = 0
+    q = 0
+    
+    while True:
+        hull.append(p)
 
+        q = (p + 1) % pointsLen
+
+
+        for iter in range(pointsLen):
+            if(turn(points[p], points[iter], points[q]) == 2):
+                q = iter
+        p = q
+
+        if p == 0:
+            break
+
+    print(hull)
+
+    hullLength = len(hull)
+    print(hullLength)
+    for i in range(hullLength):
+        print(points[hull[i]])
+        if i == 11:
+            points[hull[i]].cwPoint = points[0]
+            print(points[hull[i]].cwPoint)
+        else:
+            points[hull[i]].cwPoint = points[hull[i+1]]
+            print(points[hull[i]].cwPoint)
+    
+    
+
+   
+    
+    
+    
+    
+    
     # You can do the following to help in debugging.  This highlights
     # all the points, then shows them, then pauses until you press
     # 'p'.  While paused, you can click on a point and its coordinates
